@@ -1,0 +1,6 @@
+*.csproj
+*.sln
+libs/
+obj/
+bin/
+NuGet.Config
