@@ -1,13 +1,15 @@
 using BepInEx;
-using HarmonyLib;
-using UnityEngine;
 using BepInEx.Logging;
+using HarmonyLib;
 
-namespace FreeFoundations
+namespace UnlimitedFoundations
 {
-    [BepInPlugin(PluginMetadata.GUID, PluginMetadata.NAME, PluginMetadata.VERSION)]
-    public class FreeFoundations : BaseUnityPlugin
+    [BepInPlugin(GUID, NAME, VERSION)]
+    public class Plugin : BaseUnityPlugin
     {
+        public const string NAME = "UnlimitedFoundations";
+        public const string GUID = "com.aekoch.mods.dsp.UnlimitedFoundations";
+        public const string VERSION = "1.0.0";
 
         private static Harmony harmony;
         public static ManualLogSource logger;
@@ -17,11 +19,10 @@ namespace FreeFoundations
             logger = Logger;
 
             // Plugin startup logic
-            logger.LogInfo($"Plugin {PluginMetadata.GUID} is loaded!");
-            Debug.Log("Unity log message");
+            Logger.LogInfo($"Plugin {GUID} is loaded!");
 
             // Load hooks
-            harmony = new Harmony(PluginMetadata.GUID);
+            harmony = new Harmony(GUID);
             Patch();
             LoadYourResources();
         }
@@ -34,9 +35,7 @@ namespace FreeFoundations
 
         private void Patch()
         {
-            harmony.PatchAll(typeof(PatchComputeFlattenTerrainReform));
-            harmony.PatchAll(typeof(PatchGetItemCount));
-            harmony.PatchAll(typeof(PatchGetSandCount));
+            // TODO
         }
 
         private void Unpatch()
