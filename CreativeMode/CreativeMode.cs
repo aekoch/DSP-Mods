@@ -31,10 +31,22 @@ namespace CreativeMode
 
             logger.LogInfo($"Inventory size = {PatchNotifyStorageChange.fullInventorySize}");
 
-            Plugin.logger.LogInfo("All items");
-            foreach (ItemProto item in LDB.items.dataArray)
+            //Plugin.logger.LogInfo("All items");
+            //foreach (ItemProto item in LDB.items.dataArray)
+            //{
+            //    Plugin.logger.LogInfo($"{item.ID} - {item.name} - {item.Type}");
+            //}
+
+            Plugin.logger.LogInfo(GameMain.isRunning);
+            Plugin.logger.LogInfo(GameMain.gameName);
+
+            if (UIRoot.instance.isActiveAndEnabled)
             {
-                Plugin.logger.LogInfo($"{item.ID} - {item.name} - {item.Type}");
+                Plugin.logger.LogInfo("MainMenu is open");
+            }
+            else
+            {
+                Plugin.logger.LogInfo("MainMenu is not open");
             }
         }
 
@@ -147,16 +159,18 @@ namespace CreativeMode
     {
         static void Postfix()
         {
+            if (DSPGame.IsMenuDemo)
+            {
+                return;  // We are on the main menu
+            }
+
             GameHistoryData history = GameMain.history;
             foreach(TechProto tech in LDB.techs.dataArray)
             {
                 TechState state = history.techStates[tech.ID];
-                Plugin.logger.LogInfo($"{tech.ID} - {tech.name} - {state.unlocked}");
                 if (!state.unlocked) {
-                    Plugin.logger.LogInfo($"Unlocking {tech.name}");
                     history.UnlockTech(tech.ID);
                 }
-                Plugin.logger.LogInfo($"{tech.ID} - {tech.name} - {state.unlocked}");
             }
         }
     }
