@@ -49,6 +49,7 @@ namespace CreativeMode
             harmony.PatchAll(typeof(PatchCategoryUnlocked));
             harmony.PatchAll(typeof(PatchItemUnlocked));
             harmony.PatchAll(typeof(PatchNotifyStorageChange));
+            harmony.PatchAll(typeof(PatchResearchedTechs));
         }
 
         private void Unpatch()
@@ -102,7 +103,7 @@ namespace CreativeMode
         // These are items that have not been published in the game yet
         // I don't think the devs would appreciate me adding them to the game
         public static List<int> disallowedItems = new List<int> { 
-            1141, 1142, 1143, 2030 
+            1141, 1142, 1143, 2030, 2313
         };
 
         public static StorageComponent.GRID[] fullInventory
@@ -136,6 +137,26 @@ namespace CreativeMode
         {
             get {
                 return 120;
+            }
+        }
+    }
+
+    
+    [HarmonyPatch(typeof(GameMain), "Begin")]
+    class PatchResearchedTechs
+    {
+        static void Postfix()
+        {
+            GameHistoryData history = GameMain.history;
+            foreach(TechProto tech in LDB.techs.dataArray)
+            {
+                TechState state = history.techStates[tech.ID];
+                Plugin.logger.LogInfo($"{tech.ID} - {tech.name} - {state.unlocked}");
+                if (!state.unlocked) {
+                    Plugin.logger.LogInfo($"Unlocking {tech.name}");
+                    history.UnlockTech(tech.ID);
+                }
+                Plugin.logger.LogInfo($"{tech.ID} - {tech.name} - {state.unlocked}");
             }
         }
     }
