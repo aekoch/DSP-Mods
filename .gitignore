@@ -4,3 +4,4 @@ libs/
 obj/
 bin/
 NuGet.Config
+.vs/
