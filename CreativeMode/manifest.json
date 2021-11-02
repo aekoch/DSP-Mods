@@ -1,0 +1,10 @@
+{
+  "name": "CreativeMode",
+  "version_number": "0.1.0",
+  "author": "Placeholder",
+  "website_url": "",
+  "description": "",
+  "dependencies": [
+    "xiaoye97-BepInEx-5.4.11"
+  ]
+}
