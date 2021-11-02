@@ -61,7 +61,7 @@ namespace CreativeMode
             harmony.PatchAll(typeof(PatchCategoryUnlocked));
             harmony.PatchAll(typeof(PatchItemUnlocked));
             harmony.PatchAll(typeof(PatchNotifyStorageChange));
-            harmony.PatchAll(typeof(PatchResearchedTechs));
+            harmony.PatchAll(typeof(PatchGameMainBegin));
         }
 
         private void Unpatch()
@@ -155,7 +155,7 @@ namespace CreativeMode
 
     
     [HarmonyPatch(typeof(GameMain), "Begin")]
-    class PatchResearchedTechs
+    class PatchGameMainBegin
     {
         static void Postfix()
         {
@@ -164,14 +164,32 @@ namespace CreativeMode
                 return;  // We are on the main menu
             }
 
+            researchAllTechs();
+            initPlayerInventory();
+            initPlayerEnergy();
+        }
+
+        static void researchAllTechs()
+        {
             GameHistoryData history = GameMain.history;
-            foreach(TechProto tech in LDB.techs.dataArray)
+            foreach (TechProto tech in LDB.techs.dataArray)
             {
                 TechState state = history.techStates[tech.ID];
-                if (!state.unlocked) {
+                if (!state.unlocked)
+                {
                     history.UnlockTech(tech.ID);
                 }
             }
+        }
+
+        static void initPlayerInventory()
+        {
+            GameMain.mainPlayer.package.NotifyStorageChange();
+        }
+
+        static void initPlayerEnergy()
+        {
+            GameMain.mainPlayer.mecha.coreEnergy = GameMain.mainPlayer.mecha.coreEnergyCap;
         }
     }
 }
