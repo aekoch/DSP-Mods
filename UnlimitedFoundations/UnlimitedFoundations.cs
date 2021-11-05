@@ -9,7 +9,7 @@ namespace UnlimitedFoundations
     {
         public const string NAME = "UnlimitedFoundations";
         public const string GUID = "com.aekoch.mods.dsp.UnlimitedFoundations";
-        public const string VERSION = "1.0.0";
+        public const string VERSION = "1.0.1";
 
         private static Harmony harmony;
         public static ManualLogSource logger;
@@ -35,7 +35,8 @@ namespace UnlimitedFoundations
 
         private void Patch()
         {
-            // TODO
+            harmony.PatchAll(typeof(PatchGetItemCount));
+            harmony.PatchAll(typeof(PatchGetSandCount));
         }
 
         private void Unpatch()
