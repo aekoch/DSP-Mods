@@ -1,3 +1,4 @@
+using System;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -9,7 +10,7 @@ namespace UnlimitedFoundations
     {
         public const string NAME = "UnlimitedFoundations";
         public const string GUID = "com.aekoch.mods.dsp.UnlimitedFoundations";
-        public const string VERSION = "1.0.1";
+        public const string VERSION = "1.0.2";
 
         private static Harmony harmony;
         public static ManualLogSource logger;
@@ -35,8 +36,29 @@ namespace UnlimitedFoundations
 
         private void Patch()
         {
-            harmony.PatchAll(typeof(PatchGetItemCount));
-            harmony.PatchAll(typeof(PatchGetSandCount));
+            // Plugin startup logic
+            
+            try
+            {
+                Logger.LogInfo("Patching GetItemCount");
+                harmony.PatchAll(typeof(PatchGetItemCount));
+            }
+            catch(System.Exception ex)
+            {
+                Logger.LogInfo("Failed patching GetItemCount. Details: " + ex.ToString());
+            }
+
+            try
+            {
+                Logger.LogInfo("Patching GetSandCount");
+                harmony.PatchAll(typeof(PatchGetSandCount));
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogInfo("Failed patching GetSandCount. Details: " + ex.ToString());
+            }
+
+            
         }
 
         private void Unpatch()
@@ -55,16 +77,16 @@ namespace UnlimitedFoundations
         }
     }
 
-    [HarmonyPatch(typeof(PlanetFactory), "ComputeFlattenTerrainReform")]
-    class PatchComputeFlattenTerrainReform
-    {
-        static void Postfix(ref int __result)
-        {
-            __result = 0;
-        }
-    }
+    //[HarmonyPatch(typeof(PlanetFactory), "ComputeFlattenTerrainReform")]
+    //class PatchComputeFlattenTerrainReform
+    //{
+    //    static void Postfix(ref int __result)
+    //    {
+    //        __result = 0;
+    //    }
+    //}
 
-    [HarmonyPatch(typeof(StorageComponent), "GetItemCount")]
+    [HarmonyPatch(typeof(StorageComponent), nameof(StorageComponent.GetItemCount), new Type[] { typeof(int) })]
     class PatchGetItemCount
     {
         const int FOUNDATION_ITEM_ID = 1131;
