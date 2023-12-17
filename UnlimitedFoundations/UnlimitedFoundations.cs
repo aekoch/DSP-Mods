@@ -10,7 +10,7 @@ namespace UnlimitedFoundations
     {
         public const string NAME = "UnlimitedFoundations";
         public const string GUID = "com.aekoch.mods.dsp.UnlimitedFoundations";
-        public const string VERSION = "1.0.2";
+        public const string VERSION = "1.0.3";
 
         private static Harmony harmony;
         public static ManualLogSource logger;
@@ -103,7 +103,7 @@ namespace UnlimitedFoundations
     [HarmonyPatch(typeof(Player), "sandCount", MethodType.Getter)]
     class PatchGetSandCount
     {
-        static void Postfix(ref int __result)
+        static void Postfix(ref long __result)
         {
             __result = 1000000;
         }
