@@ -5,6 +5,6 @@
   "website_url": "https://github.com/aekoch/DSP-Mods/tree/main/UnlimitedFoundations",
   "description": "This mod ensures that you can always place foundations after you've researched the tech",
   "dependencies": [
-    "xiaoye97-BepInEx-5.4.17"
+    "xiaoye97-BepInEx-5.4.20"
   ]
 }
